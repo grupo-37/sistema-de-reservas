@@ -44,3 +44,11 @@
    Invitaciones
    Calendario
    Integraciones a redes sociales
+
+7. Clon de rappi
+   Autenticación
+   Registro de restaurantes
+   Gestión de menú
+   Repartidores
+   Solictudes
+   Mapa
