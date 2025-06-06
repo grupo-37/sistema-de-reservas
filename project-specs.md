@@ -160,13 +160,14 @@ Rutas del back
 - Property
 
   - propertyType String enum (loft, penthouse, room, house, apartment)
-  - street String
-  - streetNumber Number
-  - neighborhood String
-  - zipCode Number
-  - state String
-  - city String
-  - country String
+  - address
+    - street String
+    - streetNumber Number
+    - neighborhood String
+    - zipCode Number
+    - state String
+    - city String
+    - country String
   - rooms Number
   - baths Number
   - parkingSpots Number
@@ -184,5 +185,13 @@ Rutas del back
   - rate Number
   - photos [String]
   - maxGuest Number
+  - coords GeoJSON
 
 - Reservation
+
+  - guest Guest
+  - property Property
+  - from Date
+  - to Date
+  - rate
+  - total
