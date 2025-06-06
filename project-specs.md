@@ -27,7 +27,7 @@ El sistema cuenta con 3 roles para los usuarios
    - teléfono
    - rfc
 
-2. El usuario administrador ya estará pre cargado en el sistema y no se podrá registrar a algún otro
+2. El usuario administrador ya estará pre cargado en el sistema y no se podrá registrar ningún otro
 
 3. Para registrarse como inquilino (Guest) la persona deber registrar los siguientes datos:
 
@@ -98,23 +98,25 @@ El sistema cuenta con 3 roles para los usuarios
     - Datos de
     - Calendario para elegir fechas
 
-## Rutas front
+# Rutas front
 
-### Autenticación
+## Autenticación
 
 - /register/host Pagina para registrar hosts
 - /register/guest Página para registrar guests
 - /verify/:token Página para verificar el correo electrónico
 - /login
 - /profile ?
+- /reset Página para cuando olvidas contraseña
+- /reset/:token Págian para cambiar contraseña después de darle clic al enlace del correo
 
-### Dashboard
+## Dashboard
 
 - /dashboard/admin ?
 - /dashboard/host Página donde donde se ven algunos datos de mis propiedades y la lista de las mismas
 - /dashboard/guest Página para ver mi reserva actual, preview del historial de reservas y sugerencias
 
-### Propiedades
+## Propiedades
 
 - /dashboard/host/properties/new Página para registrar una propiedad nueva
 - /dashboard/host/properties/:id Página para ver una propiedad y sus detalles
@@ -122,34 +124,63 @@ El sistema cuenta con 3 roles para los usuarios
 - /properties Página para listar filtrar y ordenar propiedades
 - /properties/:id Pagina de detalle de una propiedad
 
-### Reservaciones
+## Reservaciones
 
 - /reservations/:id/pay
 - /dashboard/guest/reservations Página para ver mis reservaciones como huésped
 - /dashboard/guest/reservations/:id Página ver el detalle de la reservación
 - /dashboard/host/reservations Página para ver las reservaciones de mis propiedades
 
-Rutas del back
+# Rutas Back
 
-## Modelos
+## Autenticación
 
-- User
-  firstName String
-  lastName String
-  email String
-  password String
-  role String
-  verified Boolean default false
-  (timestamp)
+- /api/auth/register/host POST
+- /api/auth/register/guest POST
+- /api/auth/verify/:token PATCH
+- /api/auth/login POST
+- /api/auth/reset PATCH
 
-- Admin -> User
+## Usuarios
 
-- Host -> User
+- /api/profile GET
+- /api/profile PUT
 
-  - birthday Date
-  - phone String
-  - address String
-  - rfc String
+## Propiedades
+
+- /api/properties GET
+- /api/properties POST
+- /api/properties/:id PUT
+- /api/properties/:id GET
+- /api/properties/:id DELETE
+
+## Reservas
+
+- /api/reservations GET
+- /api/reservations POST
+- /api/reservations/:id GET
+- /api/reservations/:id/cancel PATCH
+
+# Modelos
+
+## User
+
+- firstName String
+- lastName String
+- email String
+- password String
+- role String
+- verified Boolean default false
+- (timestamp)
+
+## Admin -> User
+
+## Host -> User
+
+- birthday Date
+- phone String
+- address String
+- rfc String
 
 - Guest -> User
 
