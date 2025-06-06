@@ -131,4 +131,58 @@ El sistema cuenta con 3 roles para los usuarios
 
 Rutas del back
 
-Modelos
+## Modelos
+
+- User
+  firstName String
+  lastName String
+  email String
+  password String
+  role String
+  verified Boolean default false
+  (timestamp)
+
+- Admin -> User
+
+- Host -> User
+
+  - birthday Date
+  - phone String
+  - address String
+  - rfc String
+
+- Guest -> User
+
+  - birthday Date
+  - phone String
+  - paymentMethod String
+
+- Property
+
+  - propertyType String enum (loft, penthouse, room, house, apartment)
+  - street String
+  - streetNumber Number
+  - neighborhood String
+  - zipCode Number
+  - state String
+  - city String
+  - country String
+  - rooms Number
+  - baths Number
+  - parkingSpots Number
+  - amenities
+    - internet Boolean default false
+    - pool
+    - jacuzzi
+    - grill
+    - kitchen
+    - fridge
+    - gym
+    - washer
+    - dryer
+    - petFriendly
+  - rate Number
+  - photos [String]
+  - maxGuest Number
+
+- Reservation
