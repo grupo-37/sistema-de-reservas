@@ -65,6 +65,7 @@ El sistema cuenta con 3 roles para los usuarios
    - Gimnasio
    - Precio por noche
    - Fotos
+   - Cantidad de huéspedes permitidos
 
 6. Los hosts pueden editar los datos de sus propiedades
 
@@ -96,3 +97,38 @@ El sistema cuenta con 3 roles para los usuarios
     - Fotos
     - Datos de
     - Calendario para elegir fechas
+
+## Rutas front
+
+### Autenticación
+
+- /register/host Pagina para registrar hosts
+- /register/guest Página para registrar guests
+- /verify/:token Página para verificar el correo electrónico
+- /login
+- /profile ?
+
+### Dashboard
+
+- /dashboard/admin ?
+- /dashboard/host Página donde donde se ven algunos datos de mis propiedades y la lista de las mismas
+- /dashboard/guest Página para ver mi reserva actual, preview del historial de reservas y sugerencias
+
+### Propiedades
+
+- /dashboard/host/properties/new Página para registrar una propiedad nueva
+- /dashboard/host/properties/:id Página para ver una propiedad y sus detalles
+- /dashboard/host/properties/:id/edit Página para editar propiedad
+- /properties Página para listar filtrar y ordenar propiedades
+- /properties/:id Pagina de detalle de una propiedad
+
+### Reservaciones
+
+- /reservations/:id/pay
+- /dashboard/guest/reservations Página para ver mis reservaciones como huésped
+- /dashboard/guest/reservations/:id Página ver el detalle de la reservación
+- /dashboard/host/reservations Página para ver las reservaciones de mis propiedades
+
+Rutas del back
+
+Modelos
