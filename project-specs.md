@@ -135,21 +135,21 @@ El sistema cuenta con 3 roles para los usuarios
 
 ## Autenticación
 
-- /api/auth/register/host POST
-- /api/auth/register/guest POST
+- /api/auth/register/host POST ✅
+- /api/auth/register/guest POST ✅
 - /api/auth/verify/:token PATCH
-- /api/auth/login POST
+- /api/auth/login POST ✅
 - /api/auth/reset PATCH
 
 ## Usuarios
 
-- /api/profile GET Obtener los datos de mi perfil
-- /api/profile PUT Actualizar los datos de mi perfil
+- /api/profile GET Obtener los datos de mi perfil ✅
+- /api/profile PUT Actualizar los datos de mi perfil ✅
 
 ## Propiedades
 
 - /api/properties GET Lista de propiedades filtradas y paginadas
-- /api/properties POST Registrar una propiedad
+- /api/properties POST Registrar una propiedad ✅
 - /api/properties/:id PUT Actualizar datos de una propiedad
 - /api/properties/:id GET Obtener detalle de una propiedad
 - /api/properties/:id DELETE Borrar una propiedad
