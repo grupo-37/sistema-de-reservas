@@ -143,23 +143,23 @@ El sistema cuenta con 3 roles para los usuarios
 
 ## Usuarios
 
-- /api/profile GET
-- /api/profile PUT
+- /api/profile GET Obtener los datos de mi perfil
+- /api/profile PUT Actualizar los datos de mi perfil
 
 ## Propiedades
 
-- /api/properties GET
-- /api/properties POST
-- /api/properties/:id PUT
-- /api/properties/:id GET
-- /api/properties/:id DELETE
+- /api/properties GET Lista de propiedades filtradas y paginadas
+- /api/properties POST Registrar una propiedad
+- /api/properties/:id PUT Actualizar datos de una propiedad
+- /api/properties/:id GET Obtener detalle de una propiedad
+- /api/properties/:id DELETE Borrar una propiedad
 
 ## Reservas
 
-- /api/reservations GET
-- /api/reservations POST
-- /api/reservations/:id GET
-- /api/reservations/:id/cancel PATCH
+- /api/reservations GET Ver mis reservaciones
+- /api/reservations POST Crear una nueva reservación
+- /api/reservations/:id GET Ver detalle de una reservación
+- /api/reservations/:id/cancel PATCH Cancelar una reservación
 
 # Modelos
 
@@ -182,11 +182,11 @@ El sistema cuenta con 3 roles para los usuarios
 - address String
 - rfc String
 
-- Guest -> User
+## Guest -> User
 
-  - birthday Date
-  - phone String
-  - paymentMethod String
+- birthday Date
+- phone String
+- paymentMethod String
 
 - Property
 
