@@ -22,7 +22,7 @@ export const authenticateUser = async (req, res) => {
             name: userId.name,
             tokenAccess: generateToken(userId._id),
         });
-        res.status(200).json({message:Token});
+        res.status(200).json({message:'Token', token: generateToken(userId._id)});
     } else {
         res.status(401).json({message: 'Credenciales inválidas'});
     }
