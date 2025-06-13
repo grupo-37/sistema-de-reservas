@@ -1,5 +1,6 @@
 import express from "express";
 import Host from "./models/Host.js";
+import  authRoutes  from "./routes/authRoutes.js";
 
 const api = express();
 
@@ -26,5 +27,8 @@ api.get("/test", async (req, res) => {
     host,
   });
 });
+
+api.use(express.json());
+api.use("/api/auth", authRoutes);
 
 export default api;
