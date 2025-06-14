@@ -1,3 +1,4 @@
 node_modules/
 .pakage-lock.json
 .env
+bun.lock
