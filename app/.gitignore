@@ -1,5 +1,4 @@
 # Logs
-bun.lock
 logs
 *.log
 npm-debug.log*
