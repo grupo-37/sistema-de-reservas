@@ -1,11 +1,17 @@
 import http from "http";
+import express from "express";
+import dotenv from "dotenv";
+import profileRoutes from "./Routes/profile.js";
 import api from "./api.js";
 import "./config/database.js";
 
-const server = http.createServer(api);
+dotenv.config();
+const app = express();
 
-server.on("listening", () => {
-  console.log("Servidor está en linea en el puerto 8080");
+app.use(express.json());
+app.use("/api", profileRoutes);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
-
-server.listen(8080);
