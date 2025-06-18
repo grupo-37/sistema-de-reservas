@@ -5,6 +5,7 @@ import MainLayout from "./layouts/MainLayout";
 
 // Pages
 import Home from "./pages/Home";
+import Register from "./pages/RegisterHost";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
+            <Route path="/" element={<RegisterHost />} />
         </Route>
       </Routes>
     </BrowserRouter>
