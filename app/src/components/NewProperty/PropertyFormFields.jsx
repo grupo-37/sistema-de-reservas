@@ -1,6 +1,18 @@
+import React from "react";
+
+// Función para formatear la tarifa con separador de miles usando ' (solo visual)
+// 1. Elimina cualquier carácter que no sea número
+// 2. Aplica el separador de miles con '
+function formatTarifa(value) {
+    if (!value) return "";
+    // Elimina todo lo que no sea número
+    const num = value.toString().replace(/[^\d]/g, "");
+    // Formatea con separador de miles '
+    return num.replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+}
 
 // eslint-disable-next-line no-unused-vars
-const PropertyFormFields = ({ form, handleChange, errors, setErrors, setSuccess, initialState, loading }) => (
+const PropertyFormFields = ({ form, handleChange, errors, setForm, setErrors, setSuccess, initialState, loading }) => (
     <>
         <div className="container mt-4">
             <h2>Registrar nueva propiedad</h2>
@@ -115,7 +127,27 @@ const PropertyFormFields = ({ form, handleChange, errors, setErrors, setSuccess,
             <div className="row">
                 <div className="col-md-4 mb-3">
                     <label className="form-label">Tarifa</label>
-                    <input type="number" className={`form-control${errors.rate ? " is-invalid" : ""}`} name="rate" value={form.rate} onChange={handleChange} />
+                    {/*
+                      El input muestra la tarifa formateada con separador de miles,
+                      pero al cambiar el valor, se eliminan los separadores y solo se guarda el número real en el estado
+                    */}
+                    <input
+                        type="text"
+                        className={`form-control${errors.rate ? " is-invalid" : ""}`}
+                        name="rate"
+                        value={formatTarifa(form.rate)}
+                        onChange={e => {
+                            // Elimina separadores y guarda solo el número
+                            const raw = e.target.value.replace(/'/g, "");
+                            handleChange({
+                                target: {
+                                    name: "rate",
+                                    value: raw,
+                                    type: "text"
+                                }
+                            });
+                        }}
+                    />
                     {errors.rate && <div className="invalid-feedback">{errors.rate}</div>}
                 </div>
                 <div className="col-md-4 mb-3">
