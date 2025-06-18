@@ -39,4 +39,8 @@ const userSchema = new Schema(
   }
 );
 
+<<<<<<< HEAD
 export default model("User", userSchema);
+=======
+export default model("User", userSchema);
+>>>>>>> 602b1c6a0324f91e416966892b8a18ce465a2712
