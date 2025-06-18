@@ -12,6 +12,10 @@ export const createProperty = async (req, res) => {
     res.status(201).json(property);
   } catch (error) {
     // Manejo de errores y validaciones
-    res.status(400).json({ error: error.message });
+    if (error.name === "ValidationError") {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
   }
 };
