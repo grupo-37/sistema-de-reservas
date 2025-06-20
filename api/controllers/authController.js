@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'; 
 import { keyToken } from '../config/constants.js';
 
-const generateToken = (user) => {
+const generateToken = (userId) => {
     return jwt.sign({id}, keyToken, { expiresIn: '30d' });
 };
 
