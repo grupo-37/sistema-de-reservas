@@ -5,7 +5,7 @@ import MainLayout from "./layouts/MainLayout";
 
 // Pages
 import Home from "./pages/Home";
-import NewProperty from "./components/NewProperty/NewProperty";
+import NewPropertyPage from "./pages/NewPropertyPage";
 
 function App() {
     return (
@@ -13,7 +13,7 @@ function App() {
             <Routes>
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<Home />} />
-                    <Route path="/dashboard/host/properties/new" element={<NewProperty />} />
+                    <Route path="/dashboard/host/properties/new" element={<NewPropertyPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>
