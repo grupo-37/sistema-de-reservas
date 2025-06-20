@@ -148,7 +148,7 @@ El sistema cuenta con 3 roles para los usuarios
 
 ## Propiedades
 
-- /api/properties GET Lista de propiedades filtradas y paginadas
+- /api/properties GET Lista de propiedades filtradas y paginadas ✅
 - /api/properties POST Registrar una propiedad ✅
 - /api/properties/:id PUT Actualizar datos de una propiedad
 - /api/properties/:id GET Obtener detalle de una propiedad
