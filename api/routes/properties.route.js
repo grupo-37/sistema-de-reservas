@@ -59,6 +59,8 @@ router.post(
     body("amenities.washer").optional().isBoolean(),
     body("amenities.dryer").optional().isBoolean(),
     body("amenities.petFriendly").optional().isBoolean(),
+    body("title").notEmpty().withMessage("El título es obligatorio"),
+    body("description").notEmpty().withMessage("La descripción es obligatoria"),
     validate
   ],
   createProperty

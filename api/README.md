@@ -78,17 +78,22 @@ Permite obtener un listado de propiedades aplicando filtros opcionales.
 | `offset`              | Desde qué elemento iniciar                        |
 | `limit`               | Cantidad de resultados a devolver                 |
 | `lat`, `lon`, `range` | Búsqueda geoespacial (coordenadas + rango en km)  |
+| `pool`, `internet`, ... | Filtra por amenidades (ej. `pool=true`)                |
+| `rate_min`, `rate_max` | Rango de tarifa por noche (ej. `rate_min=1000&rate_max=5000`) |
+| `propertyType`, `rooms`, `baths`, ... | Filtra por cualquier campo del modelo |
+| `title`                | Búsqueda por título (usando `q`)                      |
 
 #### Ejemplo de request
 
 ```
-/api/properties?q=Mexico&sort=rate&order=desc&lat=19.43&lon=-99.13&range=5
+/api/properties?q=playa&pool=true&rate_min=1000&rate_max=5000&sort=rate&order=desc
 ```
 
 #### Notas
 
-* Si se usa geoespacial: el API devolverá propiedades cercanas ordenadas por distancia.
-* Si no hay coordenadas: se ordena por el campo especificado.
+* Ahora puedes filtrar por amenidades usando solo el nombre (`pool=true`, `internet=true`, etc.).
+* El campo `q` busca coincidencias en título y dirección.
+* Puedes combinar cualquier filtro del modelo en la query.
 
 ---
 
@@ -128,3 +133,9 @@ db.properties.createIndex({ coords: "2dsphere" })
   - 🐞 **Fix:**
     - Se corrigió el error relacionado con el uso de `$near` y `.sort()` simultáneamente.
     - Se documentó el uso correcto de índices geoespaciales y el formato de coordenadas.
+  - ✨ **Nuevos filtros y mejoras:**
+    - Se pueden filtrar amenidades usando solo el nombre (ej. `pool=true`).
+    - Se agregó soporte para búsqueda por título (`q` busca en `title` y dirección).
+    - Se agregó soporte para rango de tarifa (`rate_min`, `rate_max`).
+    - Se pueden combinar múltiples filtros en la query.
+    - Se agregaron los campos `title` y `description` como obligatorios en el modelo y la validación.
