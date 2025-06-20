@@ -8,4 +8,4 @@ mongoose.connection.on('disconnected', () => {
   console.log('MongoDB connection disconnected');
 });
 
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGO_URI);
