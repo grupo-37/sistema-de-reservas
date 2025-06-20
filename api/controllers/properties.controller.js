@@ -11,6 +11,7 @@ export const createProperty = async (req, res) => {
     // Responde con la propiedad creada
     res.status(201).json(property);
   } catch (error) {
+    console.log('Error al crear propiedad:', error); // <-- Depuración
     // Manejo de errores y validaciones
     if (error.name === "ValidationError") {
       res.status(400).json({ error: error.message });

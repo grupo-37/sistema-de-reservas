@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import initialState from "./formInitialState";
+import initialState from "./initialState";
 import validateProperty from "./validateProperty";
 
 const LOCAL_STORAGE_KEY = "newPropertyForm";
