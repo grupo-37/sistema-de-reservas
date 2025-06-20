@@ -1,6 +1,6 @@
 // Rutas para operaciones sobre propiedades (Property)
 import { Router } from "express";
-import { createProperty } from "../controllers/properties.controller.js";
+import { createProperty, listProperties } from "../controllers/properties.controller.js";
 import { body, validationResult } from "express-validator";
 import onlyHost from "../middlewares/onlyHost.js";
 
@@ -63,5 +63,8 @@ router.post(
   ],
   createProperty
 );
+
+// Ruta GET para listar propiedades con filtros, búsqueda y paginación
+router.get("/", listProperties);
 
 export default router;
