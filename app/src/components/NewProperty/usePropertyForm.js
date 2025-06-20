@@ -3,35 +3,27 @@ import initialState from "./initialState";
 import validateProperty from "./validateProperty";
 
 const LOCAL_STORAGE_KEY = "newPropertyForm";
-const LOCAL_STORAGE_SUBMIT_FLAG = "propertyFormSubmitted";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export function usePropertyForm() {
-    const [form, setForm] = useState(initialState);
+    // Inicializa el formulario con los datos de localStorage si existen
+    const [form, setForm] = useState(() => {
+        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+        return saved ? JSON.parse(saved) : initialState;
+    });
     const [errors, setErrors] = useState({});
     const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
     const isFirstLoad = useRef(true);
-    const [submittedSuccessfully, setSubmittedSuccessfully] = useState(() =>
-        localStorage.getItem(LOCAL_STORAGE_SUBMIT_FLAG) === "true"
-    );
 
+    // Guardar automáticamente en localStorage cada vez que cambia el formulario, excepto en el primer render
     useEffect(() => {
-        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (saved) {
-            try {
-                setForm(JSON.parse(saved));
-            } catch {
-                localStorage.removeItem(LOCAL_STORAGE_KEY);
-            }
+        if (isFirstLoad.current) {
+            isFirstLoad.current = false;
+            return;
         }
-        isFirstLoad.current = false;
-    }, []);
-
-    useEffect(() => {
-        if (!isFirstLoad.current && !submittedSuccessfully) {
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(form));
-        }
-    }, [form, submittedSuccessfully]);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(form));
+    }, [form]);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -55,7 +47,7 @@ export function usePropertyForm() {
 
         setLoading(true);
         try {
-            const res = await fetch("http://localhost:8080/api/properties", {
+            const res = await fetch(`${API_URL}/properties`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -79,8 +71,6 @@ export function usePropertyForm() {
             });
             if (res.status === 201) {
                 setSuccess("Propiedad registrada exitosamente");
-                setSubmittedSuccessfully(true);
-                localStorage.setItem(LOCAL_STORAGE_SUBMIT_FLAG, "true");
                 localStorage.removeItem(LOCAL_STORAGE_KEY);
                 setForm(initialState);
             } else {
@@ -94,6 +84,13 @@ export function usePropertyForm() {
         }
     };
 
+    const resetForm = () => {
+        setForm(initialState);
+        setErrors({});
+        setSuccess("");
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
+    };
+
     return {
         form,
         errors,
@@ -101,5 +98,6 @@ export function usePropertyForm() {
         loading,
         handleChange,
         handleSubmit,
+        resetForm,
     };
 }
