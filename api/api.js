@@ -2,10 +2,13 @@ import express from "express";
 import Host from "./models/Host.js";
 import propertiesRouter from "./routes/properties.route.js";
 import authRouter from "./routes/auth.route.js";
+import cors from "cors";
+
 const api = express();
 
 // Middleware para parsear JSON
 api.use(express.json());
+api.use(cors());
 
 // Middleware temporal para simular usuario autenticado (solo para pruebas locales)
 // eliminar en producción
