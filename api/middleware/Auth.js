@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 const { verify } = jwt;
+import { keyToken } from "../config/constants.js";
 
 const auth = (req, res, next) => {
   const token = req.header("Authorization")?.split(" ")[1];
@@ -11,7 +12,7 @@ const auth = (req, res, next) => {
   }
 
   try {
-    const decoded = verify(token, process.env.JWT_SECRET);
+    const decoded = verify(token, keyToken);
     req.user = decoded;
     next();
   } catch (err) {
