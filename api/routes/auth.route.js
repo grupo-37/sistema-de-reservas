@@ -1,6 +1,50 @@
 import { Router } from "express";
 import { registerUserGuest } from "../controllers/auth.controller.js";
 import { body, validationResult } from "express-validator";
+import bcrypt from "bcryptjs";
+
+
+const saltRounds = 10;
+
+bcrypt.genSalt(saltRounds, (err, salt) => {
+  if (err) {
+    console.error("Error generando el salt:", err);
+    return;
+  }
+
+  console.log("Salt generado:", salt);
+
+  
+  const userPassword = "password";
+  bcrypt.hash(userPassword, salt, (err, hash) => {
+    if (err) {
+      console.error("Error hasheando:", err);
+      return;
+    }
+    console.log("Hash generado:", hash);
+  });
+});
+
+const contraseñaDelUsuario = 'userPassword';
+const contraseñaHashAlmacenada = 'hashed_password_from_database';
+
+bcrypt.compare(contraseñaDelUsuario, contraseñaHashAlmacenada, (err, result) => {
+    if (err) {
+
+        console.error('Error en la comparacion de contraseña:', err);
+        return;
+    }
+
+if (result) {
+    
+    console.log('Las contraseñas coinciden');
+} else {
+
+    console.log('las contraseñas no coinciden');
+}
+});
+
+
 
 
 const router = Router();
@@ -14,11 +58,12 @@ const validate = (req, res, next) => {
   next();
 };
 
-// Ruta POST para registrar una nueva propiedad con validación y solo para hosts
+
+
 router.post(
   "/register/guest",
   [
-    //aqui poner validacion de express validation
+    
     body("firstName")
       .isString()
       .notEmpty()
