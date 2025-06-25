@@ -1,5 +1,6 @@
 import express from "express";
 
+import profileRouter from "./routes/profile.route.js";
 import propertiesRouter from "./routes/properties.route.js";
 import authRouter from "./routes/auth.route.js";
 import cors from "cors";
@@ -19,8 +20,9 @@ api.get("/", (req, res) => {
 
 // Usar rutas de autenticación bajo /api/auth
 api.use("/api/auth", authRouter);
+// Usar rutas de perfil
+api.use("/api/profile", profileRouter);
 // Usar rutas de propiedades bajo /api/properties
 api.use("/api/properties", propertiesRouter);
-
 
 export default api;

@@ -4,7 +4,6 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
     "dev": "nodemon --env-file=.env server.js"
   },
   "keywords": [],
