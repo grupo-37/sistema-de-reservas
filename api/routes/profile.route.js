@@ -4,6 +4,6 @@ import { updateProfile } from "../controllers/profile.controller.js";
 
 const router = Router();
 
-router.put("/profile", auth, updateProfile);
+router.put("/", auth, updateProfile);
 
 export default router;

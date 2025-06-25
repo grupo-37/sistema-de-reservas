@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-mongoose.connection.on("disconnected", () => {
-  console.log("MongoDB connection disconnected");
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB connection disconnected');
 });
 
 const uri = process.env.MONGO_URI;
