@@ -1,15 +1,12 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 const { verify } = jwt;
 
 const auth = (req, res, next) => {
-  const token = req.header('Authorization')?.split(' ')[1];
+  const token = req.header("Authorization")?.split(" ")[1];
 
   if (!token) {
     return res.status(401).json({
-      error: 'No token, acceso denegado.'
+      error: "No token, acceso denegado.",
     });
   }
 
@@ -19,7 +16,7 @@ const auth = (req, res, next) => {
     next();
   } catch (err) {
     res.status(401).json({
-      error: 'Token inválido o expirado'
+      error: "Token inválido o expirado",
     });
   }
 };
