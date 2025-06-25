@@ -16,10 +16,6 @@
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
-<<<<<<< HEAD
-    "dotenv": "^16.5.0",
-=======
->>>>>>> c638cde2497b3c2bfd01c3b65759bfe591ba4fa7
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
