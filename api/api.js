@@ -1,8 +1,7 @@
 import express from "express";
 
-import authRouter from "./routes/auth.route.js";
 import propertiesRouter from "./routes/properties.route.js";
-
+import authRouter from "./routes/auth.route.js";
 import cors from "cors";
 
 const api = express();
@@ -22,5 +21,6 @@ api.get("/", (req, res) => {
 api.use("/api/auth", authRouter);
 // Usar rutas de propiedades bajo /api/properties
 api.use("/api/properties", propertiesRouter);
+
 
 export default api;

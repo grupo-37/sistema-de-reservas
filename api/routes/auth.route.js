@@ -1,5 +1,5 @@
 import express from "express";
-import { registerHost } from "../controllers/auth.controller.js";
+import { registerHost, login } from "../controllers/auth.controller.js";
 import registerHostValidator from "../validators/registerHost.validator.js";
 import validateBody from "../middlewares/validateBody.js";
 
@@ -11,5 +11,7 @@ authRoutes.post(
   validateBody(registerHostValidator),
   registerHost
 );
+
+authRoutes.post('/login', login);
 
 export default authRoutes;
