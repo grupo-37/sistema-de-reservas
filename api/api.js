@@ -1,6 +1,7 @@
 import express from "express";
 import Host from "./models/Host.js";
 import propertiesRouter from "./routes/properties.route.js";
+import authRoutes from "./routes/authRoutes.js";
 import cors from "cors";
 
 const api = express();
@@ -45,5 +46,7 @@ api.get("/test", async (req, res) => {
 
 // Usar rutas de propiedades bajo /api/properties
 api.use("/api/properties", propertiesRouter);
+
+api.use("/api/auth", authRoutes);
 
 export default api;
