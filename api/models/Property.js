@@ -2,6 +2,11 @@
 // Define la estructura y validaciones de una propiedad en la base de datos
 import { Schema, model } from "mongoose";
 
+// Constante que define las claves de amenidades disponibles
+export const AMENITY_KEYS = [
+  "internet", "pool", "jacuzzi", "grill", "kitchen", "fridge", "gym", "washer", "dryer", "petFriendly"
+];
+
 // Esquema principal de la propiedad
 const propertySchema = new Schema({
   // Tipo de propiedad (solo valores permitidos)

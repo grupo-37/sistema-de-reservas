@@ -1,5 +1,5 @@
 // Controlador para operaciones sobre propiedades (Property)
-import Property from "../models/Property.js";
+import Property, { AMENITY_KEYS } from "../models/Property.js";
 
 // Crea una nueva propiedad en la base de datos
 export const createProperty = async (req, res) => {
@@ -28,99 +28,87 @@ export const listProperties = async (req, res) => {
             sort = "rate",
             order = "asc",
             q = "",
-            range,
+            range = 1, // 1 km por defecto
             lat,
             lon,
             offset = 0,
             limit = 10,
-            ...filters // Captura todos los demás query params
+            rate_min,
+            rate_max,
+            ...filters
         } = req.query;
 
-        const skip = parseInt(offset) || 0;
-        const lim = parseInt(limit) || 10;
+        const skip = Math.max(0, parseInt(offset) || 0);
+        const lim = Math.min(100, Math.max(1, parseInt(limit) || 10));
         const matchStage = {};
 
-        // Búsqueda textual
-        if (q) {
-            const regex = new RegExp(q, "i");
+        // Búsqueda textual optimizada
+        if (q.trim()) {
+            const regex = new RegExp(q.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "i");
             matchStage.$or = [
-                { "title": regex }, // ahora busca también por título
+                { title: regex },
                 { "address.city": regex },
                 { "address.state": regex },
                 { "address.country": regex },
                 { "address.neighborhood": regex },
-                { "address.street": regex },
+                { "address.street": regex }
             ];
         }
 
-        // Rango de precios (rate_min, rate_max) - procesar antes de los demás filtros
-        if (filters.rate_min || filters.rate_max) {
+        // Rango de precios
+        if (rate_min || rate_max) {
             matchStage.rate = {};
-            if (filters.rate_min) matchStage.rate.$gte = Number(filters.rate_min);
-            if (filters.rate_max) matchStage.rate.$lte = Number(filters.rate_max);
-            delete filters.rate_min;
-            delete filters.rate_max;
+            if (rate_min && !isNaN(rate_min)) matchStage.rate.$gte = Number(rate_min);
+            if (rate_max && !isNaN(rate_max)) matchStage.rate.$lte = Number(rate_max);
         }
 
-        // Filtros adicionales (propertyType, rooms, baths, amenities, etc.)
-        Object.entries(filters).forEach(([key, value]) => {
-            if (["sort", "order", "q", "range", "lat", "lon", "offset", "limit", "_id", "id"].includes(key)) return;
-            // Si el filtro es una amenidad (pool, internet, etc.)
-            const amenityKeys = [
-                "internet", "pool", "jacuzzi", "grill", "kitchen", "fridge", "gym", "washer", "dryer", "petFriendly"
-            ];
-            if (amenityKeys.includes(key)) {
-                matchStage[`amenities.${key}`] = value === "true";
-            } else if (key.startsWith("amenities.")) {
-                matchStage[key] = value === "true";
-            } else if (!isNaN(value) && value !== "") {
-                // Evita sobrescribir el filtro de rango de rate
-                if (key === "rate" && matchStage.rate && (matchStage.rate.$gte || matchStage.rate.$lte)) return;
-                matchStage[key] = Number(value);
-            } else {
-                matchStage[key] = value;
-            }
-        });
+        // Filtros adicionales optimizados
+        for (const [key, value] of Object.entries(filters)) {
+            if (["_id", "id"].includes(key) || !value) continue;
+            
+            matchStage[AMENITY_KEYS.includes(key) ? `amenities.${key}` : 
+                     key.startsWith("amenities.") ? key : key] = 
+                     AMENITY_KEYS.includes(key) || key.startsWith("amenities.") ? value === "true" :
+                     !isNaN(value) ? Number(value) : value;
+        }
 
-        // Si se proporciona lat/lon, usar aggregate + $geoNear
-        if (lat && lon && range) {
-            const aggregateQuery = [
-                {
-                    $geoNear: {
-                        near: {
-                            type: "Point",
-                            coordinates: [parseFloat(lon), parseFloat(lat)],
-                        },
-                        distanceField: "distancia",
-                        maxDistance: parseFloat(range) * 1000, // a metros
-                        spherical: true,
-                        query: matchStage,
-                    },
-                },
-                { $skip: skip },
-                { $limit: lim },
-                { $project: { __v: 0, _id: 0 } },
-            ];
-
-            // NOTA: No puedes usar $sort aquí por otros campos, solo por distancia si hace falta
+        const projection = { __v: 0, _id: 0 };
+        
+        // Búsqueda geoespacial
+        if (lat && lon && !isNaN(lat) && !isNaN(lon) && !isNaN(range)) {
             const [results, totalCount] = await Promise.all([
-                Property.aggregate(aggregateQuery),
-                Property.countDocuments(matchStage),
+                Property.aggregate([
+                    {
+                        $geoNear: {
+                            near: {
+                                type: "Point",
+                                coordinates: [parseFloat(lon), parseFloat(lat)]
+                            },
+                            distanceField: "distance",
+                            maxDistance: parseFloat(range) * 1000,
+                            spherical: true,
+                            query: matchStage
+                        }
+                    },
+                    { $skip: skip },
+                    { $limit: lim },
+                    { $project: projection }
+                ]),
+                Property.countDocuments(matchStage)
             ]);
-
+            
             return res.json({ total: totalCount, properties: results });
         }
 
-        // Si NO hay coordenadas, usar find() normal
-        const sortObj = {};
-        if (sort) sortObj[sort] = order === "desc" ? -1 : 1;
-
+        // Búsqueda normal con ordenamiento
+        const sortObj = sort ? { [sort]: order === "desc" ? -1 : 1 } : {};
+        
         const [results, totalCount] = await Promise.all([
-            Property.find(matchStage, { __v: 0, _id: 0 }).sort(sortObj).skip(skip).limit(lim),
-            Property.countDocuments(matchStage),
+            Property.find(matchStage, projection).sort(sortObj).skip(skip).limit(lim),
+            Property.countDocuments(matchStage)
         ]);
 
-        return res.json({ total: totalCount, properties: results });
+        res.json({ total: totalCount, properties: results });
 
     } catch (error) {
         console.log("Error al listar propiedades:", error);

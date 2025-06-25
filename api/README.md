@@ -83,10 +83,41 @@ Permite obtener un listado de propiedades aplicando filtros opcionales.
 | `propertyType`, `rooms`, `baths`, ... | Filtra por cualquier campo del modelo |
 | `title`                | Búsqueda por título (usando `q`)                      |
 
-#### Ejemplo de request
+#### Ejemplos de URLs para pruebas
 
+**URLs básicas:**
 ```
-/api/properties?q=playa&pool=true&rate_min=1000&rate_max=5000&sort=rate&order=desc
+http://localhost:8080/api/properties
+http://localhost:8080/api/properties?limit=5
+http://localhost:8080/api/properties?q=casa
+http://localhost:8080/api/properties?q=mexico
+```
+
+**URLs con filtros específicos:**
+```
+http://localhost:8080/api/properties?propertyType=house
+http://localhost:8080/api/properties?rooms=3&baths=2
+http://localhost:8080/api/properties?rate_min=100&rate_max=500
+http://localhost:8080/api/properties?pool=true&kitchen=true
+```
+
+**URLs con ordenamiento:**
+```
+http://localhost:8080/api/properties?sort=rate&order=desc
+http://localhost:8080/api/properties?sort=rooms&order=asc&limit=3
+```
+
+**URLs combinadas (más realistas):**
+```
+http://localhost:8080/api/properties?q=playa&propertyType=house&pool=true&limit=5
+http://localhost:8080/api/properties?rooms=2&rate_min=200&sort=rate&order=asc
+http://localhost:8080/api/properties?q=centro&baths=2&kitchen=true&internet=true
+```
+
+**URL geoespacial (búsqueda por ubicación):**
+```
+http://localhost:8080/api/properties?lat=19.4326&lon=-99.1332&range=5&limit=10
+http://localhost:8080/api/properties?lat=19.4326&lon=-99.1332  # Usa 1km por defecto
 ```
 
 #### Notas
