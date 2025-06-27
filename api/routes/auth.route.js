@@ -1,6 +1,8 @@
 import express from "express";
 import { registerHost, login } from "../controllers/auth.controller.js";
+import { registerUserGuest, acceso } from "../controllers/auth.controller.js";
 import registerHostValidator from "../validators/registerHost.validator.js";
+import registerGuestValidator from "../validators/registerGuest.validator.js";
 import validateBody from "../middlewares/validateBody.js";
 
 const authRoutes = express.Router();
@@ -11,6 +13,13 @@ authRoutes.post(
   validateBody(registerHostValidator),
   registerHost
 );
+
+authRoutes.post(
+  "/register/guest",
+  validateBody(registerGuestValidator),
+  registerUserGuest
+)
+authRoutes.post('/login', acceso);
 
 authRoutes.post('/login', login);
 

@@ -26,7 +26,6 @@ const validator = [
         .optional()
         .isString()
         .withMessage("Método de pago inválido"),
-    validate,
 ];
 
 export default validator;

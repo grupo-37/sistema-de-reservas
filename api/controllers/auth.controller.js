@@ -2,30 +2,86 @@ import Guest from "../models/Guest.js";
 import Host from "../models/Host.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
-
 import jwt from "jsonwebtoken";
+
+
+
 import { keyToken } from "../config/constants.js";
 
+
 export const registerUserGuest = async (req, res) => {
-try {
-    const newGuest = Guest(req.body);
+  try {
+    const { password, ...rest } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newGuest = new Guest({
+      ...rest,
+      password: hashedPassword,
+      role: "guest",
+    });
 
     await newGuest.save();
 
-    res.status(201).json({message: "usuario registrado correctamente"});
-} catch (error) {
+    res.status(201).json({
+      message: "Usuario registrado correctamente",
+      user: {
+        _id: newGuest._id,
+        firstName: newGuest.firstName,
+        lastName: newGuest.lastName,
+        email: newGuest.email,
+        birthday: newGuest.birthday,
+        phone: newGuest.phone,
+        paymentMethod: newGuest.paymentMethod,
+      }
+    });
+  } catch (error) {
     if (error.name === "ValidationError") {
-    res.status(400).json({ error: error.message });
+      res.status(400).json({ error: error.message });
     } else {
-      console.log(error);
-
+      console.error("Error interno del servidor:", error);
       res.status(500).json({ error: "Error interno del servidor" });
     }
   }
 };
 
+const generaToken = (id) => {
+    return jwt.sign({ id }, keyToken, { expiresIn: "30d" });
+};
 
-export const registerHost = async (req, res) => {
+export const acceso = async (req, res) => {
+    try {
+    const { email, password } = req.body;
+
+    // 1. Encontrar el usuario por email
+    const user = await User.findOne({ email });
+    if (!user) {
+    return res.status(401).json({ message: "Credenciales inválidas" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+    return res.status(401).json({ message: "Credenciales inválidas" });
+    }
+
+    const token = generaToken(user._id);
+    return res.status(200).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token,
+    })
+    }catch (error) {
+    console.error("Error en acceso:", error);
+    return res.status(500).json({ message: "Error interno del servidor" });
+    }
+  };
+
+
+
+
+
+export const registerHost = async (req, res) =>{
   try {
     const { password, ...rest } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -97,44 +153,3 @@ export const login = async (req, res) => {
     return res.status(500).json({ message: "Error interno del servidor" });
     }
 };
-
-const saltRounds = 10;
-
-bcrypt.genSalt(saltRounds, (err, salt) => {
-  if (err) {
-    console.error("Error generando el salt:", err);
-    return;
-  }
-
-  console.log("Salt generado:", salt);
-
-  
-  const userPassword = "password";
-  bcrypt.hash(userPassword, salt, (err, hash) => {
-    if (err) {
-      console.error("Error hasheando:", err);
-      return;
-    }
-    console.log("Hash generado:", hash);
-  });
-});
-
-const contraseñaDelUsuario = 'userPassword';
-const contraseñaHashAlmacenada = 'hashed_password_from_database';
-
-bcrypt.compare(contraseñaDelUsuario, contraseñaHashAlmacenada, (err, result) => {
-    if (err) {
-
-        console.error('Error en la comparacion de contraseña:', err);
-        return;
-    }
-
-if (result) {
-    
-    console.log('Las contraseñas coinciden');
-} else {
-
-    console.log('las contraseñas no coinciden');
-}
-});
-

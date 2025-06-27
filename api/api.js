@@ -24,5 +24,4 @@ api.use("/api/auth", authRouter);
 api.use("/api/profile", profileRouter);
 // Usar rutas de propiedades bajo /api/properties
 api.use("/api/properties", propertiesRouter);
-api.use("/api/auth", authRouter);
 export default api;
