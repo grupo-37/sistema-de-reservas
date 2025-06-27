@@ -1,31 +1,70 @@
-// Función para validar los datos del formulario de propiedad
+import Joi from "joi";
+
+// Esquema de validación con Joi
+const propertySchema = Joi.object({
+  title: Joi.string().required().messages({
+    "string.empty": "El título es obligatorio"
+  }),
+  description: Joi.string().required().messages({
+    "string.empty": "La descripción es obligatoria"
+  }),
+  propertyType: Joi.string().valid("loft", "penthouse", "room", "house", "apartment").required().messages({
+    "any.only": "El tipo de propiedad es inválido",
+    "string.empty": "El tipo de propiedad es obligatorio"
+  }),
+  address: Joi.object({
+    street: Joi.string().required().messages({ "string.empty": "La calle es obligatoria" }),
+    streetNumber: Joi.number().required().messages({ "number.base": "Número inválido" }),
+    neighborhood: Joi.string().required().messages({ "string.empty": "El barrio es obligatorio" }),
+    zipCode: Joi.number().required().messages({ "number.base": "Código postal inválido" }),
+    state: Joi.string().required().messages({ "string.empty": "El estado es obligatorio" }),
+    city: Joi.string().required().messages({ "string.empty": "La ciudad es obligatoria" }),
+    country: Joi.string().required().messages({ "string.empty": "El país es obligatorio" })
+  }),
+  rooms: Joi.number().min(0).required().messages({ "number.base": "Habitaciones inválidas" }),
+  baths: Joi.number().min(0).required().messages({ "number.base": "Baños inválidos" }),
+  parkingSpots: Joi.number().min(0).required().messages({ "number.base": "Estacionamientos inválidos" }),
+  amenities: Joi.object({
+    internet: Joi.boolean(),
+    pool: Joi.boolean(),
+    jacuzzi: Joi.boolean(),
+    grill: Joi.boolean(),
+    kitchen: Joi.boolean(),
+    fridge: Joi.boolean(),
+    gym: Joi.boolean(),
+    washer: Joi.boolean(),
+    dryer: Joi.boolean(),
+    petFriendly: Joi.boolean(),
+  }),
+  rate: Joi.number().min(0).required().messages({ "number.base": "Tarifa inválida" }),
+  photos: Joi.string().allow("").optional(), // Se procesa como string, luego se convierte a array
+  maxGuest: Joi.number().min(1).required().messages({ "number.base": "Máximo de huéspedes inválido" }),
+  latitude: Joi.number().min(-90).max(90).required().messages({
+    "number.base": "Latitud inválida",
+    "number.min": "La latitud debe estar entre -90 y 90",
+    "number.max": "La latitud debe estar entre -90 y 90"
+  }),
+  longitude: Joi.number().min(-180).max(180).required().messages({
+    "number.base": "Longitud inválida",
+    "number.min": "La longitud debe estar entre -180 y 180",
+    "number.max": "La longitud debe estar entre -180 y 180"
+  })
+});
+
 export default function validateProperty(form) {
+  // Convertir fotos a string si es array (por compatibilidad)
+  const formToValidate = {
+    ...form,
+    photos: Array.isArray(form.photos) ? form.photos.join(",") : form.photos
+  };
+  const { error } = propertySchema.validate(formToValidate, { abortEarly: false });
   const errors = {};
-  if (!form.title) errors.title = "El título es obligatorio";
-  if (!form.description) errors.description = "La descripción es obligatoria";
-  if (!form.propertyType) errors.propertyType = "El tipo de propiedad es obligatorio";
-  if (!form.address.street) errors.street = "La calle es obligatoria";
-  if (!form.address.streetNumber || isNaN(form.address.streetNumber)) errors.streetNumber = "Número inválido";
-  if (!form.address.neighborhood) errors.neighborhood = "El barrio es obligatorio";
-  if (!form.address.zipCode || isNaN(form.address.zipCode)) errors.zipCode = "Código postal inválido";
-  if (!form.address.state) errors.state = "El estado es obligatorio";
-  if (!form.address.city) errors.city = "La ciudad es obligatoria";
-  if (!form.address.country) errors.country = "El país es obligatorio";
-  if (!form.rooms || isNaN(form.rooms) || Number(form.rooms) < 0) errors.rooms = "Habitaciones inválidas";
-  if (!form.baths || isNaN(form.baths) || Number(form.baths) < 0) errors.baths = "Baños inválidos";
-  if (!form.parkingSpots || isNaN(form.parkingSpots) || Number(form.parkingSpots) < 0) errors.parkingSpots = "Estacionamientos inválidos";
-  if (!form.rate || isNaN(form.rate) || Number(form.rate) < 0) errors.rate = "Tarifa inválida";
-  if (!form.maxGuest || isNaN(form.maxGuest) || Number(form.maxGuest) < 1) errors.maxGuest = "Máximo de huéspedes inválido";
-  if (!form.latitude || isNaN(form.latitude)) {
-    errors.latitude = "Latitud inválida";
-  } else if (Number(form.latitude) < -90 || Number(form.latitude) > 90) {
-    errors.latitude = "La latitud debe estar entre -90 y 90";
+  if (error) {
+    error.details.forEach((detail) => {
+      // Para campos anidados como address.street, usar solo la última parte
+      const key = detail.path[detail.path.length - 1];
+      errors[key] = detail.message;
+    });
   }
-  if (!form.longitude || isNaN(form.longitude)) {
-    errors.longitude = "Longitud inválida";
-  } else if (Number(form.longitude) < -180 || Number(form.longitude) > 180) {
-    errors.longitude = "La longitud debe estar entre -180 y 180";
-  }
-  if (form.photos && form.photos.split(",").some(url => !url.trim())) errors.photos = "Formato de fotos inválido";
   return errors;
 }
