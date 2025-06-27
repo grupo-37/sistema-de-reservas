@@ -49,37 +49,6 @@ const generaToken = (id) => {
     return jwt.sign({ id }, keyToken, { expiresIn: "30d" });
 };
 
-export const acceso = async (req, res) => {
-    try {
-    const { email, password } = req.body;
-
-    // 1. Encontrar el usuario por email
-    const user = await User.findOne({ email });
-    if (!user) {
-    return res.status(401).json({ message: "Credenciales inválidas" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-    return res.status(401).json({ message: "Credenciales inválidas" });
-    }
-
-    const token = generaToken(user._id);
-    return res.status(200).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        token,
-    })
-    }catch (error) {
-    console.error("Error en acceso:", error);
-    return res.status(500).json({ message: "Error interno del servidor" });
-    }
-  };
-
-
-
-
 
 export const registerHost = async (req, res) =>{
   try {
