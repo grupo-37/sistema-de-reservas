@@ -5,7 +5,8 @@ import MainLayout from "./layouts/MainLayout";
 
 // Pages
 import Home from "./pages/Home";
-import NewProperty from "./components/NewProperty/NewProperty";
+import NewPropertyPage from "./pages/NewPropertyPage";
+import RegisterHost from "./pages/RegisterHost";
 import Login from "./pages/Login";
 
 function App() {
@@ -14,12 +15,14 @@ function App() {
             <Routes>
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<Home />} />
-                    <Route path="/dashboard/host/properties/new" element={<NewProperty />} />
+                    <Route path="/dashboard/host/properties/new" element={<NewPropertyPage />} />
+                    <Route path="/register/host" element={<RegisterHost />} />
                     <Route path="/login" element={<Login />} />
                 </Route>
             </Routes>
         </BrowserRouter>
     );
+  
 }
 
 export default App;
