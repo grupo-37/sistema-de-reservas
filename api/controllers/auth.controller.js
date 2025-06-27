@@ -1,11 +1,56 @@
+import Guest from "../models/Guest.js";
 import Host from "../models/Host.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
-
 import jwt from "jsonwebtoken";
+
+
+
 import { keyToken } from "../config/constants.js";
 
-export const registerHost = async (req, res) => {
+
+export const registerUserGuest = async (req, res) => {
+  try {
+    const { password, ...rest } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newGuest = new Guest({
+      ...rest,
+      password: hashedPassword,
+      role: "guest",
+    });
+
+    await newGuest.save();
+
+    res.status(201).json({
+      message: "Usuario registrado correctamente",
+      user: {
+        _id: newGuest._id,
+        firstName: newGuest.firstName,
+        lastName: newGuest.lastName,
+        email: newGuest.email,
+        birthday: newGuest.birthday,
+        phone: newGuest.phone,
+        paymentMethod: newGuest.paymentMethod,
+      }
+    });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      res.status(400).json({ error: error.message });
+    } else {
+      console.error("Error interno del servidor:", error);
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
+  }
+};
+
+const generaToken = (id) => {
+    return jwt.sign({ id }, keyToken, { expiresIn: "30d" });
+};
+
+
+export const registerHost = async (req, res) =>{
   try {
     const { password, ...rest } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
