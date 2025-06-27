@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import initialState from "./initialState";
 import validateProperty from "./validateProperty";
+import api from "../../utils/api";
 
 const LOCAL_STORAGE_KEY = "newPropertyForm";
-const API_URL = import.meta.env.VITE_API_URL;
 
 export function usePropertyForm() {
     // Inicializa el formulario con los datos de localStorage si existen
@@ -47,38 +47,32 @@ export function usePropertyForm() {
 
         setLoading(true);
         try {
-            const res = await fetch(`${API_URL}/properties`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    ...form,
-                    address: {
-                        ...form.address,
-                        streetNumber: Number(form.address.streetNumber),
-                        zipCode: Number(form.address.zipCode),
-                    },
-                    rooms: Number(form.rooms),
-                    baths: Number(form.baths),
-                    parkingSpots: Number(form.parkingSpots),
-                    rate: Number(form.rate),
-                    photos: form.photos ? form.photos.split(",").map((url) => url.trim()) : [],
-                    maxGuest: Number(form.maxGuest),
-                    coords: {
-                        type: "Point",
-                        coordinates: [Number(form.longitude), Number(form.latitude)],
-                    },
-                }),
+            const res = await api.post('/properties', {
+                ...form,
+                address: {
+                    ...form.address,
+                    streetNumber: Number(form.address.streetNumber),
+                    zipCode: Number(form.address.zipCode),
+                },
+                rooms: Number(form.rooms),
+                baths: Number(form.baths),
+                parkingSpots: Number(form.parkingSpots),
+                rate: Number(form.rate),
+                photos: form.photos ? form.photos.split(",").map((url) => url.trim()) : [],
+                maxGuest: Number(form.maxGuest),
+                coords: {
+                    type: "Point",
+                    coordinates: [Number(form.longitude), Number(form.latitude)],
+                },
             });
             if (res.status === 201) {
                 setSuccess("Propiedad registrada exitosamente");
                 localStorage.removeItem(LOCAL_STORAGE_KEY);
                 setForm(initialState);
-            } else {
-                const data = await res.json();
-                throw new Error(`Error: ${res.status} - ${data.message || "Error desconocido"}`);
             }
         } catch (err) {
-            setErrors({ submit: err.message });
+            const errorMessage = err.response?.data?.message || err.message || "Error desconocido";
+            setErrors({ submit: errorMessage });
         } finally {
             setLoading(false);
         }
