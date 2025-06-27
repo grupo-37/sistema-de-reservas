@@ -102,11 +102,11 @@ El sistema cuenta con 3 roles para los usuarios
 
 ## Autenticación
 
-- /register/host Pagina para registrar hosts
-- /register/guest Página para registrar guests
+- /register/host Pagina para registrar hosts ✅
+- /register/guest Página para registrar guests ✅
 - /verify/:token Página para verificar el correo electrónico
-- /login
-- /profile ?
+- /login Págiona para hacer login ✅
+- /profile ? Página para ver y editar los datos del perfil ✅
 - /reset Página para cuando olvidas contraseña
 - /reset/:token Págian para cambiar contraseña después de darle clic al enlace del correo
 
@@ -118,9 +118,9 @@ El sistema cuenta con 3 roles para los usuarios
 
 ## Propiedades
 
-- /dashboard/host/properties/new Página para registrar una propiedad nueva
-- /dashboard/host/properties/:id Página para ver una propiedad y sus detalles
-- /dashboard/host/properties/:id/edit Página para editar propiedad
+- /dashboard/host/properties/new Página para registrar una propiedad nueva ✅
+- /dashboard/host/properties/:id Página para ver una propiedad y sus detalles ✅
+- /dashboard/host/properties/:id/edit? Página para editar propiedad ?
 - /properties Página para listar filtrar y ordenar propiedades
 - /properties/:id Pagina de detalle de una propiedad
 
@@ -148,7 +148,7 @@ El sistema cuenta con 3 roles para los usuarios
 
 ## Propiedades
 
-- /api/properties GET Lista de propiedades filtradas y paginadas
+- /api/properties GET Lista de propiedades filtradas y paginadas ✅
 - /api/properties POST Registrar una propiedad ✅
 - /api/properties/:id PUT Actualizar datos de una propiedad
 - /api/properties/:id GET Obtener detalle de una propiedad
