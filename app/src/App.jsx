@@ -6,7 +6,7 @@ import MainLayout from "./layouts/MainLayout";
 // Pages
 import Home from "./pages/Home";
 import NewPropertyPage from "./pages/NewPropertyPage";
-import Register from "./pages/RegisterHost";
+import RegisterHost from "./pages/RegisterHost";
 
 function App() {
     return (
@@ -15,7 +15,7 @@ function App() {
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<Home />} />
                     <Route path="/dashboard/host/properties/new" element={<NewPropertyPage />} />
-                    <Route path="/" element={<Register />} />
+                    <Route path="/register/host" element={<RegisterHost />} />
                 </Route>
             </Routes>
         </BrowserRouter>
