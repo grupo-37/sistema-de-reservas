@@ -15,20 +15,12 @@ function App() {
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<Home />} />
                     <Route path="/dashboard/host/properties/new" element={<NewPropertyPage />} />
+                    <Route path="/" element={<Register />} />
                 </Route>
             </Routes>
         </BrowserRouter>
     );
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
-            <Route path="/" element={<RegisterHost />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+  
 }
 
 export default App;
