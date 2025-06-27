@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Layouts
 import MainLayout from "./layouts/MainLayout";
@@ -7,6 +7,7 @@ import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import NewPropertyPage from "./pages/NewPropertyPage";
 import RegisterHost from "./pages/RegisterHost";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
             <Routes>
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<Home />} />
+                    <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/dashboard/host/properties/new" element={<NewPropertyPage />} />
                     <Route path="/register/host" element={<RegisterHost />} />
                 </Route>
