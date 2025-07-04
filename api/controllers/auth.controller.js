@@ -4,10 +4,7 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-
-
 import { keyToken } from "../config/constants.js";
-
 
 export const registerUserGuest = async (req, res) => {
   try {
@@ -18,7 +15,6 @@ export const registerUserGuest = async (req, res) => {
     const newGuest = new Guest({
       ...rest,
       password: hashedPassword,
-      role: "guest",
     });
 
     await newGuest.save();
@@ -33,7 +29,7 @@ export const registerUserGuest = async (req, res) => {
         birthday: newGuest.birthday,
         phone: newGuest.phone,
         paymentMethod: newGuest.paymentMethod,
-      }
+      },
     });
   } catch (error) {
     if (error.name === "ValidationError") {
@@ -45,12 +41,7 @@ export const registerUserGuest = async (req, res) => {
   }
 };
 
-const generaToken = (id) => {
-    return jwt.sign({ id }, keyToken, { expiresIn: "30d" });
-};
-
-
-export const registerHost = async (req, res) =>{
+export const registerHost = async (req, res) => {
   try {
     const { password, ...rest } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -88,37 +79,36 @@ export const registerHost = async (req, res) =>{
   }
 };
 
-
 const generateToken = (id) => {
-    return jwt.sign({ id }, keyToken, { expiresIn: "30d" });
+  return jwt.sign({ id }, keyToken, { expiresIn: "30d" });
 };
 
 export const login = async (req, res) => {
-    try {
+  try {
     const { email, password } = req.body;
 
     // 1. Encontrar el usuario por email
     const user = await User.findOne({ email });
     if (!user) {
-    return res.status(401).json({ message: "Credenciales inválidas" });
+      return res.status(401).json({ message: "Credenciales inválidas" });
     }
 
     // 2. Verificar la contraseña
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-    return res.status(401).json({ message: "Credenciales inválidas" });
+      return res.status(401).json({ message: "Credenciales inválidas" });
     }
 
     // 3. Generar el token si todo es correcto
     const token = generateToken(user._id);
     return res.status(200).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        token,
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      token,
     });
-    } catch (err) {
+  } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Error interno del servidor" });
-    }
+  }
 };
