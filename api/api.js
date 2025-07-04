@@ -3,6 +3,7 @@ import express from "express";
 import profileRouter from "./routes/profile.route.js";
 import propertiesRouter from "./routes/properties.route.js";
 import authRouter from "./routes/auth.route.js";
+import paymentRouter from "./routes/payment.route.js";
 import cors from "cors";
 
 const api = express();
@@ -24,5 +25,8 @@ api.use("/api/auth", authRouter);
 api.use("/api/profile", profileRouter);
 // Usar rutas de propiedades bajo /api/properties
 api.use("/api/properties", propertiesRouter);
+
+api.use("/api/payment", paymentRouter);
+
 
 export default api;
