@@ -1,4 +1,3 @@
-import React from "react";
 import NewProperty from "../components/NewProperty/NewProperty";
 
 const NewPropertyPage = () => {

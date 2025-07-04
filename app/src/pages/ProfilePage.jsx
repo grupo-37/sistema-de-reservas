@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileForm from "../components/ProfileForm";
 import { getProfile } from "../services/api";
 
