@@ -13,7 +13,6 @@ export const createOrder = async (req,res)=> {
                     unit_price: parseFloat(req.body.unit_price),
                     currency_id:'MXN',
                     description: req.body.description,
-                    quantity: parseInt(req.body.quantity),
                 },
             ],
             back_urls: {
