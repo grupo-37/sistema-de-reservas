@@ -1,0 +1,41 @@
+services:
+  app:
+    build:
+      context: ./chat-server
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    env_file:
+      - path: app/.env
+        required: true
+    depends_on:
+      - api
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - path: api/.env
+        required: true
+    networks:
+      - mi-red
+    depends_on:
+      - mongodb
+  chat-server:
+    build:
+      context: ./chat-server
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - mi-red
+
+networks:
+  mi-red:
+    driver: bridge
