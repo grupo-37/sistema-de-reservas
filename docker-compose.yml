@@ -5,9 +5,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
-    env_file:
-      - path: app/.env
-        required: true
+    environment:
+      - VITE_API_URL=http://localhost:8080/api
+    # env_file:
+    #   - path: app/.env
+    #     required: true
     depends_on:
       - api
   api:
@@ -16,9 +18,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    env_file:
-      - path: api/.env
-        required: true
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/baseChida
+    # env_file:
+    #   - path: api/.env
+    #     required: true
     networks:
       - mi-red
     depends_on:
