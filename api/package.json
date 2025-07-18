@@ -4,7 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --env-file=.env server.js"
+    "dev": "nodemon --env-file-if-exists=.env server.js",
+    "start": "node --env-file-if-exists=.env server.js"
   },
   "keywords": [],
   "author": "",
