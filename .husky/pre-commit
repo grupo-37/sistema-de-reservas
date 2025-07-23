@@ -1,2 +1,2 @@
 cd api
-yarn lint
+yarn lint && yarn test
