@@ -25,7 +25,30 @@ jobs:
         
       - name: Lint run
         run: yarn lint
-      
+  
+  test:
+    needs: lint
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - name: Configurar git
+        uses: actions/checkout@v4.2.2
+        
+      - name: Configurar NodeJs
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: 22.14.0
+           # TODO agregar caché
+      - name: Instalación de dependencias
+        run: yarn
+        
+      - name: Test run
+        env: 
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          
+        run: yarn test
        
   
   # test:
