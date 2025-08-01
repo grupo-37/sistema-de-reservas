@@ -45,6 +45,9 @@ jobs:
         run: yarn
         
       - name: Test run
+        env: 
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          
         run: yarn test
        
   
