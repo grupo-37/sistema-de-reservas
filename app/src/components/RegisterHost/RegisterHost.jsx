@@ -20,6 +20,7 @@ const RegisterHost = () => {
                                 value={formData.firstName}
                                 onChange={handleChange}
                                 required
+                                data-cy="firstNameInput"
                             />
                             {errors.firstName && <div className="invalid-feedback">{errors.firstName}</div>}
                         </div>
@@ -33,6 +34,7 @@ const RegisterHost = () => {
                                 value={formData.lastName}
                                 onChange={handleChange}
                                 required
+                                data-cy="lastNameInput"
                             />
                             {errors.lastName && <div className="invalid-feedback">{errors.lastName}</div>}
                         </div>
@@ -46,6 +48,7 @@ const RegisterHost = () => {
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
+                                data-cy="emailInput"
                             />
                             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                         </div>
@@ -59,6 +62,7 @@ const RegisterHost = () => {
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
+                                data-cy="passwordInput"
                             />
                             {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                         </div>
@@ -72,6 +76,7 @@ const RegisterHost = () => {
                                 value={formData.birthday}
                                 onChange={handleChange}
                                 required
+                                data-cy="birthdayInput"
                             />
                             {errors.birthday && <div className="invalid-feedback">{errors.birthday}</div>}
                         </div>
@@ -85,6 +90,7 @@ const RegisterHost = () => {
                                 value={formData.phone}
                                 onChange={handleChange}
                                 required
+                                data-cy="phoneInput"
                             />
                             {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
                         </div>
@@ -98,6 +104,7 @@ const RegisterHost = () => {
                                 value={formData.address}
                                 onChange={handleChange}
                                 required
+                                data-cy="addressInput"
                             ></textarea>
                             {errors.address && <div className="invalid-feedback">{errors.address}</div>}
                         </div>
@@ -111,10 +118,11 @@ const RegisterHost = () => {
                                 value={formData.rfc}
                                 onChange={handleChange}
                                 required
+                                data-cy="rfcInput"
                             />
                             {errors.rfc && <div className="invalid-feedback">{errors.rfc}</div>}
                         </div>
-                        <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                        <button type="submit" className="btn btn-primary w-100" disabled={loading} data-cy="submitButton">
                             {loading ? 'Registrando...' : 'Registrar Host'}
                         </button>
                     </form>
