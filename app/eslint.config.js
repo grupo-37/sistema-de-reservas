@@ -2,6 +2,8 @@ import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import pluginCypress from 'eslint-plugin-cypress'
+
 
 export default [
   { ignores: ['dist'] },
@@ -28,6 +30,12 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+    },
+  },
+  pluginCypress.configs.recommended,
+  {
+    rules: {
+      'cypress/no-unnecessary-waiting': 'off',
     },
   },
 ]
